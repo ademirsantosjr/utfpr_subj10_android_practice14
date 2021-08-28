@@ -37,6 +37,21 @@ public class MainActivity extends AppCompatActivity {
         changeBackGroundColor();
     }
 
+    private void saveColorPreference(int newValue) {
+        SharedPreferences sharedPreferences = getSharedPreferences(FILE,
+                Context.MODE_PRIVATE);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        editor.putInt(COLOR, newValue);
+
+        editor.commit();
+
+        option = newValue;
+
+        changeBackGroundColor();
+    }
+
     private void changeBackGroundColor() {
         layoutMain.setBackgroundColor(option);
     }
@@ -48,21 +63,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        MenuItem menuItem;
+
+        switch (option) {
+            case Color.BLUE:
+                menuItem = menu.findItem(R.id.menuItemBlue);
+                menuItem.setChecked(true);
+                break;
+
+            case Color.YELLOW:
+                menuItem = menu.findItem(R.id.menuItemYellow);
+                menuItem.setChecked(true);
+                break;
+
+            case Color.RED:
+                menuItem = menu.findItem(R.id.menuItemRed);
+                menuItem.setChecked(true);
+                break;
+
+            default:
+                return false;
+        }
+
+        menuItem.setChecked(true);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
         item.setChecked(true);
 
         switch (item.getItemId()) {
             case R.id.menuItemYellow:
-                layoutMain.setBackgroundColor(Color.YELLOW);
+                saveColorPreference(Color.YELLOW);
                 return true;
 
             case R.id.menuItemBlue:
-                layoutMain.setBackgroundColor(Color.BLUE);
+                saveColorPreference(Color.BLUE);
                 return true;
 
             case R.id.menuItemRed:
-                layoutMain.setBackgroundColor(Color.RED);
+                saveColorPreference(Color.RED);
                 return true;
 
             default:
